@@ -60,8 +60,14 @@ axios.get('https://fapi.binance.com/fapi/v1/ticker/price').then(
                 }
                 let interval = priceArray[priceArray.length - 1].time - priceArray[0].time;
                 let percent = ((priceArray[priceArray.length - 1].price - priceArray[0].price) / priceArray[0].price) * 100;
+                if ((interval > 50000) && (interval < 990000)) {
+                    if (Math.abs(percent) > 0.5){
+                        logMessage(`${item.symbol} - ${(interval / 60000).toFixed(1)} мин, ${percent.toFixed(3)}%`);
+                    }
+
+                }
                 if ((interval > 100000) && (interval < 150000)) {
-                    if (Math.abs(percent) > 1){
+                    if (Math.abs(percent) > 1.9){
                         sendAlert(`${item.symbol} - ${(interval / 60000).toFixed(1)} мин, ${percent.toFixed(3)}%`);
                     }
 
@@ -78,9 +84,11 @@ axios.get('https://fapi.binance.com/fapi/v1/ticker/price').then(
 
 function sendAlert (message) {
     axios.post('https://n8n.kostyukovich-dev.com/webhook/7310760b-15bc-41d4-94e6-60599d28c387', {message: message})
+
+}
+function logMessage(message) {
     console.log(message);
 }
-
 
 
         })
