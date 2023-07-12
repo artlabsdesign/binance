@@ -4,7 +4,7 @@ const mysql = require('mysql2');
 
 const connection = mysql.createConnection({
     host: "localhost",
-    user: "binance_mysql",
+    user: "root",
     database: "binance",
     password: "Anton31337"
 });
@@ -55,19 +55,23 @@ axios.get('https://fapi.binance.com/fapi/v1/ticker/price').then(
                 //console.log(priceArray);
                 priceArray.push(newpriceObject);
                 //console.log(priceArray)
-                if (priceArray.length > 11) {
-                    priceArray.splice(0, priceArray.length-11)
+                if (priceArray.length > 6) {
+                    priceArray.splice(0, priceArray.length-6)
                 }
                 let interval = priceArray[priceArray.length - 1].time - priceArray[0].time;
                 let percent = ((priceArray[priceArray.length - 1].price - priceArray[0].price) / priceArray[0].price) * 100;
-                if ((interval > 50000) && (interval < 990000)) {
-                    if (Math.abs(percent) > 0.5){
-                        logMessage(`${item.symbol} - ${(interval / 60000).toFixed(1)} мин, ${percent.toFixed(3)}%`);
+                let direction = 'short';
+                if (percent > 0){
+                   direction = 'long'
+                }
+                if ((interval > 30000) && (interval < 9900000)) {
+                    if (Math.abs(percent) > 0.2){
+                        logMessage(`${item.symbol} - ${(interval / 60000).toFixed(1)} мин, ${direction} ${Math.abs(percent.toFixed(3))}%`);
                     }
 
                 }
-                if ((interval > 100000) && (interval < 150000)) {
-                    if (Math.abs(percent) > 1.9){
+                if ((interval > 50000) && (interval < 75000)) {
+                    if (Math.abs(percent) > 0.99){
                         sendAlert(`${item.symbol} - ${(interval / 60000).toFixed(1)} мин, ${percent.toFixed(3)}%`);
                     }
 
