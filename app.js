@@ -74,7 +74,7 @@ axios.get('https://fapi.binance.com/fapi/v1/ticker/price').then(
                 }
                 if ((interval > 50000) && (interval < 75000)) {
                     if (Math.abs(percent) > 0.99){
-                        sendAlert(`${item.symbol} - ${(interval / 60000).toFixed(1)} мин, ${percent.toFixed(3)}%`);
+                        sendAlert(`${item.symbol} - ${(interval / 60000).toFixed(1)} мин, ${direction} ${Math.abs(percent.toFixed(3))}%`);
                     }
 
                 }
