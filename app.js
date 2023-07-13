@@ -2,6 +2,7 @@
 
 const axios = require('axios');
 const mysql = require('mysql2');
+require(dotenv).config();
 
 
 const connection = mysql.createConnection({
