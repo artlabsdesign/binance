@@ -9,7 +9,7 @@ const connection = mysql.createConnection({
     host: "localhost",
     user: process.env.MYSQL_USER,
     database: "binance",
-    password: "Anton31337"
+    password: process.env.MYSQL_PASSWORD
 });
 connection.connect(function(err){
     if (err) {
@@ -75,7 +75,7 @@ axios.get('https://fapi.binance.com/fapi/v1/ticker/price').then(
                 }
                 if ((interval > 50000) && (interval < 75000)) {
                     if (Math.abs(percent) > 0.99){
-                        sendAlert(`${item.symbol} - ${(interval / 60000).toFixed(1)} мин, ${direction} ${Math.abs(percent.toFixed(3))}%`);
+                        sendAlert(`<a href = 'https://www.binance.com/ru/futures/${item.symbol}'>${item.symbol}</a> - ${(interval / 60000).toFixed(1)} мин, ${direction} ${Math.abs(percent.toFixed(3))}%`);
                     }
 
                 }
