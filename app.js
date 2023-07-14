@@ -80,7 +80,7 @@ axios.get('https://fapi.binance.com/fapi/v1/ticker/price').then(
 
                 }
                 if ((interval > 50000) && (interval < 75000)) {
-                    if (Math.abs(percent) > 0.2){
+                    if (Math.abs(percent) > 0.9){
                         sendAlert(`<a href = 'https://www.binance.com/ru/futures/${item.symbol}'>${item.symbol}</a> - ${(interval / 60000).toFixed(1)} мин, ${direction} ${Math.abs(percent.toFixed(3))}%`);
                     }
 
