@@ -1,7 +1,9 @@
 const { USDMClient } = require('binance');
+require('dotenv').config();
 
-const API_KEY = 'xxx';
-const API_SECRET = 'yyy';
+
+const API_KEY = process.env.API_KEY;
+const API_SECRET = process.env.SECRET_KEY;
 
 const client = new USDMClient({
     api_key: API_KEY,

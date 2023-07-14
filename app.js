@@ -2,12 +2,12 @@
 
 const axios = require('axios');
 const mysql = require('mysql2');
-require(dotenv).config();
+require('dotenv').config();
 
 
 const connection = mysql.createConnection({
     host: "localhost",
-    user: "binance_mysql",
+    user: process.env.MYSQL_USER,
     database: "binance",
     password: "Anton31337"
 });
@@ -90,8 +90,9 @@ axios.get('https://fapi.binance.com/fapi/v1/ticker/price').then(
         });
 
 function sendAlert (message) {
-    axios.post('https://n8n.kostyukovich-dev.com/webhook/7310760b-15bc-41d4-94e6-60599d28c387', {message: message})
-
+    if (process.env.MODE === 'work') {
+        axios.post('https://n8n.kostyukovich-dev.com/webhook/7310760b-15bc-41d4-94e6-60599d28c387', {message: message})
+    }
 }
 function logMessage(message) {
     console.log(message);
