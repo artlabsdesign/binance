@@ -3,7 +3,13 @@
 const axios = require('axios');
 const mysql = require('mysql2');
 require('dotenv').config();
+//const Tgfancy = require("tgfancy");
 
+/*const bot = new Tgfancy(process.env.BOT_TOKEN, {
+    // all options to 'tgfancy' MUST be placed under the
+    // 'tgfancy' key, as shown below
+    tgfancy: {},
+});*/
 
 const connection = mysql.createConnection({
     host: "localhost",
@@ -74,7 +80,7 @@ axios.get('https://fapi.binance.com/fapi/v1/ticker/price').then(
 
                 }
                 if ((interval > 50000) && (interval < 75000)) {
-                    if (Math.abs(percent) > 0.99){
+                    if (Math.abs(percent) > 0.2){
                         sendAlert(`<a href = 'https://www.binance.com/ru/futures/${item.symbol}'>${item.symbol}</a> - ${(interval / 60000).toFixed(1)} мин, ${direction} ${Math.abs(percent.toFixed(3))}%`);
                     }
 
@@ -91,13 +97,14 @@ axios.get('https://fapi.binance.com/fapi/v1/ticker/price').then(
 
 function sendAlert (message) {
     const sql1 = 'SELECT * FROM users'
-    connection.query(sql1, symbol, function (err, results) {
+    connection.query(sql1, function (err, results) {
         if (err) console.log(err);
-        results.data.map ((user) => {
-            if (process.env.MODE === 'work') {
-                axios.post('https://n8n.kostyukovich-dev.com/webhook/7310760b-15bc-41d4-94e6-60599d28c387', {message: message, chatid: user.chatid})
-            }
+        console.log(results);
+        results.map ((user) => {
+            axios.post(`https://api.telegram.org/bot${process.env.BOT_TOKEN}/sendMessage`,{text:message, chat_id: user.chatid, parse_mode:'HTML', disable_web_page_preview: true});
         })
+
+
 
     });
 }
