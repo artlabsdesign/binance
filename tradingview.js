@@ -84,7 +84,7 @@ async function setInitialData(symbols){
 
 async function getRecommendations(symbols) {
     return await axios.post(url, {"symbols": {"tickers": symbols, "query": {
-                "types": []}}, "columns": ["Recommend.All|4h"]})
+                "types": []}}, "columns": ["Recommend.All|120"]})
         .then((response) => {
             //console.log(response.data.data)
             return response.data.data
