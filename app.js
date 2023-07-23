@@ -70,8 +70,10 @@ axios.get('https://fapi.binance.com/fapi/v1/ticker/price').then(
                 let interval = priceArray[priceArray.length - 1].time - priceArray[0].time;
                 let percent = ((priceArray[priceArray.length - 1].price - priceArray[0].price) / priceArray[0].price) * 100;
                 let direction = 'short';
+                let smile = '📉';
                 if (percent > 0){
                    direction = 'long'
+                    smile = '📈'
                 }
                 if ((interval > 30000) && (interval < 9900000)) {
                     if (Math.abs(percent) > 0.2){
@@ -81,7 +83,7 @@ axios.get('https://fapi.binance.com/fapi/v1/ticker/price').then(
                 }
                 if ((interval > 50000) && (interval < 75000)) {
                     if (Math.abs(percent) > 0.9){
-                        sendAlert(`<a href = 'https://www.binance.com/ru/futures/${item.symbol}'>${item.symbol}</a> - ${(interval / 60000).toFixed(1)} мин, ${direction} ${Math.abs(percent.toFixed(3))}%`);
+                        sendAlert(`${smile} <a href = 'https://www.binance.com/ru/futures/${item.symbol}'>${item.symbol}</a> - ${(interval / 60000).toFixed(1)} мин, ${direction} ${Math.abs(percent.toFixed(3))}%`);
                     }
 
                 }

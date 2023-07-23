@@ -6,6 +6,7 @@
     "express": "^4.18.2",
     "mysql2": "^3.5.0",
     "request": "^2.88.2",
-    "save": "^2.9.0"
+    "save": "^2.9.0",
+    "tradingview-scraper": "^1.0.3"
   }
 }
