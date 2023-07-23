@@ -49,7 +49,7 @@ connection.promise().query('SELECT symbol FROM symbols')
             data.map((item)=>{
                 connection.promise().query(`SELECT symbol, rec FROM symbols WHERE symbol = '${item.s.slice(8)}'`)
                     .then((symbol)=>{
-                        if((getRec(item.d[0]) === 'STRONG BUY')||(getRec(item.d[0]) === 'STRONG SELL')) {
+                        if(Math.abs(item.d[0]) > 0.6) {
                             //console.log (`${item.s} - Новое занчение: ${getRec(item.d[0])}`)
                             if (getRec(item.d[0]) !== symbol[0][0].rec) {
                                 let smile = '🍏';
