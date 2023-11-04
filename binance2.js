@@ -21,6 +21,7 @@ const takelong = process.env.TAKELONG;
 const takeshort = process.env.TAKESHORT;
 const stoplong = process.env.STOPLONG;
 const stopshort = process.env.STOPSHORT;
+const inverse = process.env.INVERSEMODE;
 
 const side = {
   main: {
@@ -31,6 +32,11 @@ const side = {
     long: 'SELL',
     short: 'BUY'
   }
+}
+
+const inv = {
+  long: 'short',
+  short: 'long'
 }
 
 const mult = {
@@ -98,6 +104,9 @@ const makeOrder = (async (s) => {
     const pricePrecision = symInfo.pricePrecision;
     const quantityPrecision = symInfo.quantityPrecision;
     const direction = s.direction;
+    if (inverse) {
+      direction = inv[direction];
+    }
     const stopMult = mult.stop[direction];
     const takeMult = mult.take[direction];
     const mainside = side.main[direction];
