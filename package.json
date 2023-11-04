@@ -4,9 +4,16 @@
     "binance": "^2.8.6",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "lodash": "^4.17.21",
     "mysql2": "^3.5.0",
+    "redis": "^4.6.10",
     "request": "^2.88.2",
     "save": "^2.9.0",
-    "tradingview-scraper": "^1.0.3"
+    "socket.io": "^4.7.2",
+    "tradingview-scraper": "^1.0.3",
+    "ws": "^8.14.2"
+  },
+  "optionalDependencies": {
+    "utf-8-validate": "^5.0.10"
   }
 }

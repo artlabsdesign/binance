@@ -3,13 +3,28 @@
 const axios = require('axios');
 const mysql = require('mysql2');
 require('dotenv').config();
-//const Tgfancy = require("tgfancy");
+const WebSocket  = require('ws');
 
-/*const bot = new Tgfancy(process.env.BOT_TOKEN, {
-    // all options to 'tgfancy' MUST be placed under the
-    // 'tgfancy' key, as shown below
-    tgfancy: {},
-});*/
+const myWs = new WebSocket('ws://localhost:9000');
+
+// Функции по работе с WebSocket
+    myWs.onopen = function () {
+        console.log('подключился');
+    };
+    // обработчик сообщений от сервера
+    myWs.onmessage = function (message) {
+        console.log('Message: %s', message.data);
+    };
+    // функция для отправки echo-сообщений на сервер
+    function wsSendEcho(value) {
+        myWs.send(JSON.stringify({action: 'ECHO', data: value.toString()}));
+    }
+    // функция для отправки команды ping на сервер
+    function wsSendPing() {
+        myWs.send(JSON.stringify({action: 'PING'}));
+    }
+
+//---------------------------------------
 
 const connection = mysql.createConnection({
     host: "localhost",
@@ -64,8 +79,8 @@ axios.get('https://fapi.binance.com/fapi/v1/ticker/price').then(
                 //console.log(priceArray);
                 priceArray.push(newpriceObject);
                 //console.log(priceArray)
-                if (priceArray.length > 6) {
-                    priceArray.splice(0, priceArray.length-6)
+                if (priceArray.length > 4) {
+                    priceArray.splice(0, priceArray.length-4)
                 }
                 let interval = priceArray[priceArray.length - 1].time - priceArray[0].time;
                 let percent = ((priceArray[priceArray.length - 1].price - priceArray[0].price) / priceArray[0].price) * 100;
@@ -77,13 +92,16 @@ axios.get('https://fapi.binance.com/fapi/v1/ticker/price').then(
                 }
                 if ((interval > 30000) && (interval < 9900000)) {
                     if (Math.abs(percent) > 0.2){
-                        logMessage(`${item.symbol} - ${(interval / 60000).toFixed(1)} мин, ${direction} ${Math.abs(percent.toFixed(3))}%`);
+                        //logMessage(`${item.symbol} - ${(interval / 60000).toFixed(1)} мин, ${direction} ${Math.abs(percent.toFixed(3))}%`);
+                        //wsSendEcho(`{"symbol": "${item.symbol}", "direction": "${direction}"}`);
                     }
 
                 }
-                if ((interval > 50000) && (interval < 75000)) {
-                    if (Math.abs(percent) > 0.9){
+                if (interval < 50000) {
+                    if (Math.abs(percent) > 0.7){
+                        logMessage(`${item.symbol} - ${(interval / 60000).toFixed(1)} мин, ${direction} ${Math.abs(percent.toFixed(3))}%`);
                         sendAlert(`${smile} <a href = 'https://www.binance.com/ru/futures/${item.symbol}'>${item.symbol}</a> - ${(interval / 60000).toFixed(1)} мин, ${direction} ${Math.abs(percent.toFixed(3))}%`);
+                        wsSendEcho(`{"symbol": "${item.symbol}", "direction": "${direction}"}`);
                     }
 
                 }
@@ -109,6 +127,7 @@ function sendAlert (message) {
 
 
     });
+    
 }
 function logMessage(message) {
     console.log(message);
@@ -117,14 +136,5 @@ function logMessage(message) {
 
         })
     }, 12000);
-
-
-/*const user = ["Tom", 29];
-const sql = "INSERT INTO users(name, age) VALUES(?, ?)";
-
-connection.query(sql, user, function(err, results) {
-    if(err) console.log(err);
-    else console.log("Данные добавлены");
-});*/
 
 
