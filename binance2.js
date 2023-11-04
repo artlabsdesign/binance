@@ -17,6 +17,10 @@ const API_KEY = process.env.API_KEY;
 const API_SECRET = process.env.SECRET_KEY;
 const leverage = process.env.LEVERAGE;
 const margin = process.env.MARGIN;
+const takelong = process.env.TAKELONG;
+const takeshort = process.env.TAKESHORT;
+const stoplong = process.env.STOPLONG;
+const stopshort = process.env.STOPSHORT;
 
 const side = {
   main: {
@@ -31,12 +35,12 @@ const side = {
 
 const mult = {
   take: {
-    long: 1.01,
-    short: 0.99
+    long: takelong,
+    short: takeshort
   },
   stop: {
-    long: 0.993,
-    short: 1.007
+    long: stoplong,
+    short: stopshort
   }
 }
 
